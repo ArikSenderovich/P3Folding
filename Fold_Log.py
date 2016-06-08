@@ -1965,22 +1965,16 @@ def testLog(Log, TimeInterval):
     return sample
 
 best_rmse =[]
-#m_range = [i for i in range(8,19)]
 m_range = [9]
 
 for k in m_range:
     print(datetime.datetime.now())
 
-    #FoldTree= ReadTreeTuple('C:\Users\Arik\PycharmProjects\BPM_ICAPS\Data_Experiments\dfci_april_standard2.ptml')
     print('Reading Tree...')
-    #FoldTree = ReadTreeTuple('C:\Users\Arik\PycharmProjects\BPM_ICAPS\Data_Experiments\dfci_april_40.ptml')
-    FoldTree = ReadTreeTuple('C:\Users\Arik\PycharmProjects\BPM_ICAPS\Data_Experiments\dfci_april_75.ptml')
-    #FoldTree = ReadTreeTuple('C:\Users\Arik\PycharmProjects\BPM_ICAPS\Data_Experiments\dfci_april_50.ptml')
-    #FoldTree = ReadTreeTuple('C:\Users\Arik\PycharmProjects\BPM_ICAPS\Data_Experiments\dfci_april_65.ptml')
+    FoldTree = ReadTreeTuple('root\tree_model.ptml')
 
     print('Tree Loaded. Reading Log...')
-    Log = getLog('C:\Users\Arik\PycharmProjects\BPM_ICAPS\Data_Experiments\DFCI_Train_April.csv')
-    #Log = getLog('C:\Users\Arik\PycharmProjects\BPM_ICAPS\Data_Experiments\DFCI_April_All_Patients.csv')
+    Log = getLog('root\Event_Log.csv')
     print('Log loaded. Tracifying log...')
     TraceLog = tracifyLog(Log)
     print('Log tracified. Connecting Tree to Log...')
@@ -1993,14 +1987,12 @@ for k in m_range:
 
     n, m,ext,c_ext,tau,c_s,Q_mat,delta_,state_names = QNA_Input
     QNA_FullBlown = QNA_Fluid(n, m,ext,c_ext,tau,c_s,Q_mat,delta_, DayTimeInterval)
-    #QNA_FillBlown = QNA(n, m,ext,c_ext,tau,c_s,Q_mat,delta_, DayTimeInterval)
     print('Tree connected and enriched. Adding arrivals...')
     ETree = addArrivals(ETree,QNA_FullBlown[1],QNA_FullBlown[2],state_names)
 
     param = getFoldParam(ETree,DayTimeInterval)
 
-    #print(QNA_FullBlown[0]*60)
-    #res_vars = encode_ILP(c,u,B,S)
+
     S= []
 
     for p in param[1]:
@@ -2091,7 +2083,7 @@ for k in m_range:
     print(mean_pred - training_results[bb_train])
 
 
-    Log = getLog('C:\Users\Arik\PycharmProjects\BPM_ICAPS\Data_Experiments\DFCI_Test_May.csv')
+    Log = getLog('root\Test_Log.csv')
     testSample= testLog(Log,DayTimeInterval)
 
     bb_test = BestBudget(testSample, training_results, Bias,0, e_range)
